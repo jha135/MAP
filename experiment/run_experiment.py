@@ -110,7 +110,7 @@ if __name__ == "__main__":
         "--benchmark", 
         type=str, 
         required=True, 
-        choices=['gsm8k', 'drop', 'hotpotqa', 'mbpp', 'game_of_24','trivia_cw'],
+        choices=['gsm8k', 'drop', 'hotpotqa', 'human_eval', 'game_of_24','trivia_cw'],
         help="The benchmark to use."
     )
     parser.add_argument(
