@@ -5,54 +5,36 @@ import re
 import argparse
 from pathlib import Path
 from tqdm import tqdm
-
-# 프로젝트 최상위 경로를 Python 경로에 추가
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
-
 from src.map.llm_handler import LLMHandler
-from src.utils.data_loader import (
-    load_gsm8k,
-    load_drop,
-    load_game_of_24,
-    load_hotpotqa,
-    load_mbpp,
-    load_trivia_cw,
-)
+from src.map.strategy_executor import run_strategy 
+from src.utils.data_loader import load_gsm8k
 
-# --- 평가 함수들 ---
+
 
 def _evaluate_gsm8k(generated_answer: str, correct_answer: str) -> str:
     """GSM8K 답변을 최종 숫자 비교를 통해 평가합니다."""
     try:
-        # 정답에서 숫자 추출 (예: "#### 18" -> "18")
         correct_num = re.findall(r'####\s*(-?\d+\.?\d*)', correct_answer)[-1]
-        # 생성된 답변에서 숫자 추출
         generated_num = re.findall(r'(-?\d+\.?\d*)', generated_answer)[-1]
         return "success" if float(correct_num) == float(generated_num) else "failure"
     except (IndexError, ValueError):
-        # 숫자 추출 실패 시 'failure'로 처리
         return "failure"
 
-def _evaluate_with_llm_judge(question: str, generated_answer: str, correct_answer: str, llm: LLMHandler) -> str:
-    judge_prompt = f"""
-    당신은 공정한 심판입니다. 당신의 임무는 생성된 답변이 질문에 올바르게 답하는지 판단하는 것입니다.
-    정답은 참고용으로 제공됩니다.
-
-    질문: "{question}"
-    정답: "{correct_answer}"
-    생성된 답변: "{generated_answer}"
-
-    생성된 답변을 분석하세요. 이 답변이 질문에 성공적이고 정확하게 답했습니까?
-    오직 "success" 또는 "failure"로만 응답하세요.
-    """
-    response = llm.invoke(judge_prompt).lower().strip()
-    return "success" if "success" in response else "failure"
-
 def evaluate_answer(benchmark_name: str, question: str, generated_answer: str, correct_answer: str, llm_judge: LLMHandler) -> str:
+    """벤치마크에 맞는 평가 방식을 선택합니다."""
     if benchmark_name == 'gsm8k':
         return _evaluate_gsm8k(generated_answer, correct_answer)
     else:
-        return _evaluate_with_llm_judge(question, generated_answer, correct_answer, llm_judge)
+        judge_prompt = f"""
+        Is the following generated answer correct for the question?
+        Question: "{question}"
+        Correct Answer: "{correct_answer}"
+        Generated Answer: "{generated_answer}"
+        Respond only with "success" or "failure".
+        """
+        response, _ = llm_judge.invoke(judge_prompt)
+        return "success" if "success" in response.lower() else "failure"
 
 
 def main(benchmark_name: str, limit: int):
@@ -61,17 +43,12 @@ def main(benchmark_name: str, limit: int):
     # 1. 유틸리티 및 프롬프트 초기화
     llm = LLMHandler()
     prompt_dir = Path(__file__).resolve().parent.parent.parent / "data" / "prompts"
-    stage1_prompt_template = (prompt_dir / "metacognitive_evaluation.md").read_text(encoding='utf-8')
+    stage1_prompt_template = (prompt_dir / "01_metacognitive_evaluation.md").read_text(encoding='utf-8')
 
     # 2. 검증용 데이터 로드
     print(f"검증용 데이터셋 로딩 중: {benchmark_name}")
-    loader_map = {
-        'gsm8k': load_gsm8k, 'drop': load_drop, 'game_of_24': load_game_of_24,
-        'hotpotqa': load_hotpotqa, 'mbpp': load_mbpp, 'trivia_cw': load_trivia_cw,
-    }
-    if benchmark_name not in loader_map:
-        raise ValueError(f"알 수 없거나 지원되지 않는 벤치마크입니다: {benchmark_name}")
-    validation_problems = loader_map[benchmark_name](split="train")
+    validation_problems = load_gsm8k(split="test")
+    
     if not validation_problems:
         print("검증용 데이터를 찾을 수 없습니다. 중단합니다.")
         return
@@ -90,7 +67,7 @@ def main(benchmark_name: str, limit: int):
         input_query = f"Context:\n{context}\n\nQuestion:\n{question}" if context else question
 
         stage1_prompt = stage1_prompt_template.replace("{{user_query}}", input_query)
-        stage1_output_str = llm.invoke(stage1_prompt)
+        stage1_output_str, _ = llm.invoke(stage1_prompt)
 
         try:
             json_str = re.search(r'```json\n(.*?)\n```', stage1_output_str, re.DOTALL).group(1) if '```json' in stage1_output_str else stage1_output_str
@@ -101,8 +78,8 @@ def main(benchmark_name: str, limit: int):
 
             if stage1_data.get("status") != "REQUEST_SYNTHESIS":
                 selected_strategy = stage1_data.get("selected_strategy", "Unknown")
-                execution_prompt = f"Please solve the following problem using the '{selected_strategy}' method:\n\n{input_query}"
-                generated_answer = llm.invoke(execution_prompt)
+                generated_answer, _ = run_strategy(llm, selected_strategy, question, context)
+                
                 final_outcome = evaluate_answer(benchmark_name, question, generated_answer, correct_answer, llm)
 
             scores = stage1_data.get("strategy_scores", {})
@@ -140,3 +117,4 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     main(args.benchmark, args.limit)
+
