@@ -1,20 +1,22 @@
-name: map
+name: map-project
 channels:
   - defaults
   - conda-forge
+  - huggingface
 dependencies:
+
   - python=3.10
   - pip
   - pandas
-  - jupyter
-  - matplotlib
-  - seaborn
+  - pyarrow
+  - jupyter 
+  - matplotlib 
+  - seaborn 
+  - datasets
+  - tqdm
   - pip:
     - langchain
     - langchain-community
-    - langchain-experimental
+    - langchain_experimental
     - openai
     - duckduckgo-search
-    - pandas 
-    - pyarrow
-    - tqdm
