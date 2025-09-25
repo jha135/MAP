@@ -15,7 +15,7 @@ class MapAgent:
         self.llm_handler = LLMHandler()
         
         try:
-            self.stage1_prompt_template = (PROMPT_DIR / "01_metacognitive_evaluation.md").read_text(encoding='utf-8')
+            self.stage1_prompt_template = (PROMPT_DIR / "metacognitive_evaluation.md").read_text(encoding='utf-8')
             self.self_correction_prompt_template = (PROMPT_DIR / "b_path_self_correction.md").read_text(encoding='utf-8')
             self.synthesis_unified_prompt_template = (PROMPT_DIR / "c_path_synthesis.md").read_text(encoding='utf-8')
             print("Prompt templates loaded successfully.")
