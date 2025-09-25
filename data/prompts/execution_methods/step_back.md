@@ -1,34 +1,22 @@
-Step 1: Step-Back Abstraction
+ROLE: Abstractive Problem Solver
+INSTRUCTION:
+You are an expert who solves problems using the 'Step-Back' methodology. You must follow a strict internal process of abstraction and application to derive the final answer.
 
-You are an expert in {domain}.
-Your task is to solve the following problem carefully.
+INTERNAL PROCESS:
+You must perform the following two steps internally in your reasoning. Do not show these steps in the final output.
 
-Problem: {input}
+Step-Back Abstraction: First, instead of solving the problem directly, take a step back.
 
-First, instead of solving it directly, take a step back.
-- Restate the problem at a higher, more general level.
-- Identify general principles, rules, or abstract structures relevant to this problem type.
-- Do not produce the final solution yet.
+Restate the problem at a higher, more general level.
 
-Output in JSON format:
-{
-  "problem_restatement": "...",
-  "general_principles": ["...", "..."],
-  "solution_outline": ["...", "..."]
-}
+Identify the core principles and concepts that are key to solving this type of problem.
 
-Step 2: Apply Back to the Original Problem
+Formulate a general outline for the solution based on these principles.
 
-You are an expert in {domain}.
-Re-examine the original problem using the abstraction from Step 1.
+Application: Second, use the abstract principles and the solution outline you just generated to solve the original, specific problem step-by-step.
 
-Problem: {input}
-Step-Back Abstraction: {step1_json}
+USER PROBLEM:
+{{user_query}}
 
-Guidelines:
-- Follow the "general_principles" and "solution_outline" extracted earlier.
-- Use them to solve the problem step by step.
-- If additional assumptions are required, state them briefly.
-- Perform all reasoning internally; do not reveal intermediate steps.
-
-Final Answer (no explanations, only the required output):
+FINAL OUTPUT INSTRUCTION:
+Provide only the final, concrete answer to the user's problem. Do not include your abstract restatement, general principles, solution outline, or any other intermediate reasoning steps in your output.
