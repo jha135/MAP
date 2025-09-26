@@ -6,6 +6,7 @@ from datetime import datetime
 from pathlib import Path
 from tqdm import tqdm
 sys.path.append(str(Path(__file__).resolve().parent.parent))
+
 from src.map.agent import MapAgent
 from src.utils.data_loader import (
     load_gsm8k,
@@ -19,7 +20,7 @@ from src.utils.data_loader import (
 def main(benchmark_name: str, limit: int):
     print(f"Starting MAP Agent Experiment on Benchmark: '{benchmark_name}'")
 
-    # 1. 벤치마크 데이터 로드
+    # 1. 벤치마크 데이터 로드 (수정된 부분)
     print(f"Loading benchmark data: {benchmark_name}")
     benchmark_name_lower = benchmark_name.lower()
     
@@ -32,18 +33,12 @@ def main(benchmark_name: str, limit: int):
         'trivia_cw': load_trivia_cw,
     }
     
-    if benchmark_name_lower in loader_map:
-        problems = loader_map[benchmark_name_lower]()
-    else:
-        if benchmark_name_lower == 'gsm8k':
-            problems = load_gsm8k(split="test")
-        elif benchmark_name_lower == 'drop':
-            problems = load_drop(split="validation")
-        elif benchmark_name_lower == 'hotpotqa':
-            problems = load_hotpotqa(split="validation")
-        else:
-            raise ValueError(f"Unknown or unsupported benchmark: {benchmark_name}")
+    loader = loader_map.get(benchmark_name_lower)
+    if not loader:
+        raise ValueError(f"Unknown or unsupported benchmark: {benchmark_name}")
 
+    # split 인자 없이 함수를 직접 호출하여 버그 해결
+    problems = loader()
 
     if not problems:
         print("No problems loaded. Aborting experiment.")
@@ -100,7 +95,6 @@ def main(benchmark_name: str, limit: int):
     file_path = results_dir / file_name
 
     try:
-        # [수정] 필드명은 변경할 필요 없음
         fieldnames = ["question", "correct_answer", "generated_answer", "execution_log", "total_tokens"]
         with open(file_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -117,7 +111,6 @@ if __name__ == "__main__":
         "--benchmark", 
         type=str, 
         required=True, 
-
         choices=['gsm8k', 'drop', 'hotpotqa', 'game_of_24','trivia_cw','humaneval'],
         help="The benchmark to use."
     )
