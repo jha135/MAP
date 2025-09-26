@@ -12,7 +12,7 @@ from src.map.strategy_executor import run_strategy
 # [MODIFIED] Import central data loaders
 from src.utils.data_loader import (
     load_gsm8k, load_drop, load_hotpotqa, load_game_of_24,
-    load_mbpp, load_humaneval, load_trivia_cw
+    load_humaneval, load_trivia_cw
 )
 
 
@@ -28,7 +28,6 @@ def main(benchmark_name: str, limit: int):
         'drop': lambda: load_drop(split="validation"),
         'hotpotqa': lambda: load_hotpotqa(split="validation"),
         'game_of_24': lambda: load_game_of_24(split="test"),
-        'mbpp': lambda: load_mbpp(split="test"),
         'humaneval': lambda: load_humaneval(split="test"),
         'trivia_cw': lambda: load_trivia_cw(split="test")
     }
@@ -83,7 +82,6 @@ def main(benchmark_name: str, limit: int):
     file_path = results_dir / file_name
 
     try:
-        # [MODIFIED] Add total_tokens to the CSV fieldnames
         fieldnames = ["question", "correct_answer", "generated_answer", "total_tokens"]
         with open(file_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -101,7 +99,7 @@ if __name__ == "__main__":
         type=str, 
         required=True,
         # [MODIFIED] Add choices for user convenience
-        choices=['gsm8k', 'drop', 'hotpotqa', 'game_of_24', 'mbpp', 'humaneval', 'trivia_cw'],
+        choices=['gsm8k', 'drop', 'hotpotqa', 'game_of_24', 'humaneval', 'trivia_cw'],
         help="The benchmark to use."
     )
     parser.add_argument(

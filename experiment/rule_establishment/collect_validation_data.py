@@ -13,7 +13,6 @@ from src.utils.data_loader import (
     load_drop,
     load_game_of_24,
     load_hotpotqa,
-    load_mbpp,
     load_humaneval,
     load_trivia_cw
 )
@@ -62,7 +61,6 @@ def main(benchmark_name: str, limit: int):
         'drop': lambda: load_drop(split="validation"),
         'hotpotqa': lambda: load_hotpotqa(split="validation"),
         'game_of_24': lambda: load_game_of_24(split="test"),
-        'mbpp': lambda: load_mbpp(split="test"),
         'humaneval': lambda: load_humaneval(split="test"),
         'trivia_cw': lambda: load_trivia_cw(split="test")
     }
@@ -137,9 +135,8 @@ def main(benchmark_name: str, limit: int):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="규칙 수립을 위한 데이터를 수집합니다.")
-    # [수정] choices 추가하여 사용자 편의성 증대
     parser.add_argument("--benchmark", type=str, required=True, 
-                        choices=['gsm8k', 'drop', 'hotpotqa', 'game_of_24', 'mbpp', 'humaneval', 'trivia_cw'],
+                        choices=['gsm8k', 'drop', 'hotpotqa', 'game_of_24', 'humaneval', 'trivia_cw'],
                         help="사용할 벤치마크 이름.")
     parser.add_argument("--limit", type=int, default=0, help="실행할 문제 수를 제한합니다. 기본값은 0 (전체 실행).")
     

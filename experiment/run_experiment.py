@@ -12,7 +12,7 @@ from src.utils.data_loader import (
     load_drop,
     load_game_of_24,
     load_hotpotqa,
-    load_mbpp, 
+    load_humaneval,
     load_trivia_cw
 )
 
@@ -28,7 +28,7 @@ def main(benchmark_name: str, limit: int):
         'drop': load_drop,
         'game_of_24': load_game_of_24,
         'hotpotqa': load_hotpotqa,
-        'mbpp': load_mbpp,
+        'humaneval': load_humaneval,
         'trivia_cw': load_trivia_cw,
     }
     
@@ -118,7 +118,7 @@ if __name__ == "__main__":
         type=str, 
         required=True, 
 
-        choices=['gsm8k', 'drop', 'hotpotqa', 'game_of_24','trivia_cw','mbpp'],
+        choices=['gsm8k', 'drop', 'hotpotqa', 'game_of_24','trivia_cw','humaneval'],
         help="The benchmark to use."
     )
     parser.add_argument(
