@@ -2,6 +2,7 @@ import os
 from langchain_openai import ChatOpenAI
 from langchain_core.messages import HumanMessage
 from langchain_core.outputs import LLMResult
+from langchain_core.outputs import Generation
 
 class LLMHandler:
 
@@ -17,13 +18,15 @@ class LLMHandler:
         )
         print(f"LLMHandler initialized with model: {model_name}")
 
-    def invoke(self, prompt: str) -> str:
+    def invoke(self, prompt: str) -> tuple[str, dict]:
         print(prompt)
-        
         messages = [HumanMessage(content=prompt)]
-        
+
         try:
-            result: LLMResult = self.client.invoke(messages)
-            return result.content
+            result: LLMResult = self.client.generate([messages])
+            generation: Generation = result.generations[0][0]
+            token_usage = result.llm_output.get("token_usage", {}) if result.llm_output else {}
+
+            return generation.text, token_usage
         except Exception as e:
-            return f"Error: {e}"
+            return f"Error: {e}", {}

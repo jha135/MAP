@@ -8,46 +8,43 @@ from tqdm import tqdm
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from src.map.llm_handler import LLMHandler
 from src.map.strategy_executor import run_strategy
-
-def load_preprocessed_benchmark(benchmark_name: str, split: str = "test") -> list:
-
-    # 데이터 파일 경로를 동적으로 구성
-    file_path = Path(__file__).resolve().parent.parent.parent / "data" / "benchmarks" / benchmark_name / f"{split}.json"
-    print(f"Loading pre-processed benchmark data from: {file_path}")
-    
-    if not file_path.exists():
-        raise FileNotFoundError(f"표준화된 벤치마크 파일({file_path})을 찾을 수 없습니다. 모든 벤치마크를 QA JSON 형식으로 사전 처리했는지 확인하세요.")
-
-    # 표준 JSON 파일을 읽어 파싱
-    with open(file_path, 'r', encoding='utf-8') as f:
-        problems = json.load(f)
-    
-    return problems
+# [수정] 중앙 데이터 로더 import
+from src.utils.data_loader import (
+    load_gsm8k, load_drop, load_hotpotqa, load_game_of_24,
+    load_mbpp, load_humaneval, load_trivia_cw
+)
 
 
 def main(benchmark_name: str, limit: int):
     strategy_to_run = "cot"
     print(f"Starting Baseline Experiment: Strategy='{strategy_to_run}', Benchmark='{benchmark_name}'")
 
-    try:
-        problems = load_preprocessed_benchmark(benchmark_name.lower())
-    except FileNotFoundError as e:
-        print(f"오류: {e}")
-        return
+    # [수정] 중앙 데이터 로더를 사용하여 데이터 로드
+    benchmark_name_lower = benchmark_name.lower()
+    loader_map = {
+        'gsm8k': lambda: load_gsm8k(split="test"),
+        'drop': lambda: load_drop(split="validation"),
+        'hotpotqa': lambda: load_hotpotqa(split="validation"),
+        'game_of_24': lambda: load_game_of_24(split="test"),
+        'mbpp': lambda: load_mbpp(split="test"),
+        'humaneval': lambda: load_humaneval(split="test"),
+        'trivia_cw': lambda: load_trivia_cw(split="test")
+    }
+    loader = loader_map.get(benchmark_name_lower)
+    if not loader:
+        raise ValueError(f"Unknown or unsupported benchmark: {benchmark_name}")
+    problems = loader()
 
     if not problems:
         print("No problems loaded. Aborting experiment.")
         return
 
-    # 문제 수 제한
     if limit > 0 and len(problems) > limit:
         print(f"Limiting benchmark from {len(problems)} to the first {limit} problems.")
         problems = problems[:limit]
 
-    # 2. LLM 핸들러 초기화
     llm_handler = LLMHandler()
 
-    # 3. 벤치마크 문제 순회 및 결과 기록
     print(f"Running '{strategy_to_run}' strategy on {len(problems)} problems...")
     results = []
     for problem in tqdm(problems, desc=f"Running {strategy_to_run}"):
@@ -56,12 +53,14 @@ def main(benchmark_name: str, limit: int):
             context = problem.get('context')
             correct_answer = problem.get('answer', 'N/A')
             
-            generated_answer = run_strategy(llm_handler, strategy_to_run, question, context)
+            # [수정] 튜플 반환값 처리 및 토큰 기록
+            generated_answer, tokens = run_strategy(llm_handler, strategy_to_run, question, context)
             
             results.append({
                 "question": question,
                 "correct_answer": correct_answer,
                 "generated_answer": generated_answer,
+                "total_tokens": json.dumps(tokens) # 토큰 정보 추가
             })
         except Exception as e:
             print(f"\n문제 처리 중 오류 발생: {e}. 다음 문제로 넘어갑니다.")
@@ -69,10 +68,10 @@ def main(benchmark_name: str, limit: int):
                 "question": problem.get('question', 'N/A'),
                 "correct_answer": problem.get('answer', 'N/A'),
                 "generated_answer": f"EXECUTION_ERROR: {e}",
+                "total_tokens": "{}" # 토큰 정보 추가
             })
             continue
 
-    # 4. 결과 파일로 저장
     print("\nSaving results...")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     results_dir = Path(__file__).resolve().parent.parent.parent / "results" / "scores"
@@ -82,7 +81,8 @@ def main(benchmark_name: str, limit: int):
     file_path = results_dir / file_name
 
     try:
-        fieldnames = ["question", "correct_answer", "generated_answer"]
+        # [수정] CSV 필드명에 total_tokens 추가
+        fieldnames = ["question", "correct_answer", "generated_answer", "total_tokens"]
         with open(file_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
@@ -91,14 +91,15 @@ def main(benchmark_name: str, limit: int):
     except Exception as e:
         print(f"Failed to save results. Error: {e}")
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run a baseline experiment for a single strategy.")
     parser.add_argument(
         "--benchmark", 
         type=str, 
         required=True,
-        help="The benchmark folder name to use (e.g., 'gsm8k')."
+        # [수정] choices 추가하여 사용자 편의성 증대
+        choices=['gsm8k', 'drop', 'hotpotqa', 'game_of_24', 'mbpp', 'humaneval', 'trivia_cw'],
+        help="The benchmark to use."
     )
     parser.add_argument(
         "--limit", 

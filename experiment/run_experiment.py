@@ -4,7 +4,7 @@ import json
 import argparse
 from datetime import datetime
 from pathlib import Path
-from tqdm import tqdm # tqdm 임포트 추가
+from tqdm import tqdm
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 from src.map.agent import MapAgent
 from src.utils.data_loader import (
@@ -12,7 +12,7 @@ from src.utils.data_loader import (
     load_drop,
     load_game_of_24,
     load_hotpotqa,
-    load_mbpp,
+    load_mbpp, 
     load_trivia_cw
 )
 
@@ -33,9 +33,17 @@ def main(benchmark_name: str, limit: int):
     }
     
     if benchmark_name_lower in loader_map:
-        problems = loader_map[benchmark_name_lower](split="test")
+        problems = loader_map[benchmark_name_lower]()
     else:
-        raise ValueError(f"Unknown or unsupported benchmark: {benchmark_name}")
+        if benchmark_name_lower == 'gsm8k':
+            problems = load_gsm8k(split="test")
+        elif benchmark_name_lower == 'drop':
+            problems = load_drop(split="validation")
+        elif benchmark_name_lower == 'hotpotqa':
+            problems = load_hotpotqa(split="validation")
+        else:
+            raise ValueError(f"Unknown or unsupported benchmark: {benchmark_name}")
+
 
     if not problems:
         print("No problems loaded. Aborting experiment.")
@@ -52,7 +60,6 @@ def main(benchmark_name: str, limit: int):
     # 3. 벤치마크 문제 순회 및 결과 기록
     print(f"Running MAP Agent on {len(problems)} problems...")
     results = []
-    # [수정] tqdm을 사용하여 진행 상황 표시
     for problem in tqdm(problems, desc=f"Benchmarking {benchmark_name}"):
         
         try:
@@ -63,24 +70,23 @@ def main(benchmark_name: str, limit: int):
             
             generated_answer = response_dict.get("final_answer", "ERROR: No answer generated.")
             execution_log = response_dict.get("execution_log", {})
-            total_tokens = response_dict.get("total_tokens", 0) # [추가] 토큰 사용량 추출
+            total_tokens = response_dict.get("total_tokens", {})
             
             results.append({
                 "question": question,
                 "correct_answer": correct_answer,
                 "generated_answer": generated_answer,
                 "execution_log": json.dumps(execution_log),
-                "total_tokens": total_tokens # [추가] 토큰 사용량 저장
+                "total_tokens": json.dumps(total_tokens) 
             })
         except Exception as e:
             print(f"\nError processing a problem: {e}. Skipping to the next one.")
-            # 실패한 경우에도 로그를 남길 수 있도록 결과 추가
             results.append({
                 "question": problem.get('question', 'N/A'),
                 "correct_answer": problem.get('answer', 'N/A'),
                 "generated_answer": f"EXECUTION_ERROR: {e}",
                 "execution_log": "{}",
-                "total_tokens": 0
+                "total_tokens": "{}"
             })
             continue
 
@@ -94,6 +100,7 @@ def main(benchmark_name: str, limit: int):
     file_path = results_dir / file_name
 
     try:
+        # [수정] 필드명은 변경할 필요 없음
         fieldnames = ["question", "correct_answer", "generated_answer", "execution_log", "total_tokens"]
         with open(file_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
@@ -110,7 +117,8 @@ if __name__ == "__main__":
         "--benchmark", 
         type=str, 
         required=True, 
-        choices=['gsm8k', 'drop', 'hotpotqa', 'human_eval', 'game_of_24','trivia_cw'],
+
+        choices=['gsm8k', 'drop', 'hotpotqa', 'game_of_24','trivia_cw','mbpp'],
         help="The benchmark to use."
     )
     parser.add_argument(
