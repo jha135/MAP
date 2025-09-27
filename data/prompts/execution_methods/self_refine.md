@@ -14,5 +14,4 @@ Refine: Third, based on your critique, rewrite and improve the draft to create t
 USER PROBLEM:
 {{user_query}}
 
-FINAL OUTPUT INSTRUCTION:
-Provide only the final, refined answer. Do not include the draft, your critique, or any other intermediate steps in your output. Your response should directly address the user's problem.
+>> FINAL ANSWER: [Write your answer here]

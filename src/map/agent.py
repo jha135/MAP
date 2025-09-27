@@ -63,7 +63,7 @@ class MapAgent:
 
         path = ''
         # 데이터 기반으로 확정된 최종 규칙을 여기에 적용해야 합니다.
-        if (max_score >= 7 and confidence_score <= 0.9): # confidence_score 조건은 예시로 남겨두되, 주 규칙은 점수 기반으로
+        if (max_score >= 7 and confidence_score >= 0.9):
             path = 'A'
         elif max_score <= 4 or confidence_score <= 0.77 or stage1_data.get("status") == "REQUEST_SYNTHESIS":
             path = 'C'

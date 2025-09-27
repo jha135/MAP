@@ -66,11 +66,14 @@ def main(benchmark_name: str, limit: int):
             generated_answer = response_dict.get("final_answer", "ERROR: No answer generated.")
             execution_log = response_dict.get("execution_log", {})
             total_tokens = response_dict.get("total_tokens", {})
+            stage1_data = execution_log.get("stage1_data", {})
+            confidence_score = stage1_data.get("confidence_score", None)
             
             results.append({
                 "question": question,
                 "correct_answer": correct_answer,
                 "generated_answer": generated_answer,
+                "confidence_score": confidence_score,
                 "execution_log": json.dumps(execution_log),
                 "total_tokens": json.dumps(total_tokens) 
             })
@@ -88,14 +91,14 @@ def main(benchmark_name: str, limit: int):
     # 4. 결과 파일로 저장
     print("\nSaving results...")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    results_dir = Path(__file__).resolve().parent.parent / "results" / "scores"
+    results_dir = Path(__file__).resolve().parent.parent / "results" / "outputs" / "main"
     results_dir.mkdir(parents=True, exist_ok=True)
     
     file_name = f"results_MAP_{benchmark_name}_{timestamp}.csv"
     file_path = results_dir / file_name
 
     try:
-        fieldnames = ["question", "correct_answer", "generated_answer", "execution_log", "total_tokens"]
+        fieldnames = ["question", "correct_answer", "generated_answer", "confidence_score", "execution_log", "total_tokens"]
         with open(file_path, 'w', newline='', encoding='utf-8') as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()

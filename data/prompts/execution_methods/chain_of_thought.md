@@ -12,4 +12,4 @@ You are now solving the problem using the Chain-of-Thought (CoT) strategy. This 
 [Step 3] Reason through each subproblem.  
 [Step 4] Combine the results to reach the final answer.
 
-Final Answer: [Write your answer here]
+>> FINAL ANSWER: [Write your answer here]

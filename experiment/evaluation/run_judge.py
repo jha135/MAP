@@ -9,9 +9,14 @@ from collections import defaultdict
 sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from src.map.llm_handler import LLMHandler
 
-def parse_judge_response(response_str: str, is_map_model: bool) -> dict:
+def parse_judge_response(response: tuple | str, is_map_model: bool) -> dict:
+    # LLM 응답이 튜플이면, 첫 번째 요소(실제 텍스트)만 사용합니다.
+    response_str = response[0] if isinstance(response, tuple) else response
+
     try:
-        json_str = re.search(r'```json\n(.*?)\n```', response_str, re.DOTALL).group(1) if '```json' in response_str else response_str
+        # 응답에서 JSON 코드 블록만 정확히 추출합니다.
+        match = re.search(r'```json\s*\n(.*?)\n\s*```', response_str, re.DOTALL)
+        json_str = match.group(1) if match else response_str
         return json.loads(json_str)
     except (json.JSONDecodeError, AttributeError, IndexError):
         base_failure = {"task_success": {"is_correct": False, "is_catastrophic_failure": True, "reasoning": "Failed to parse judge response."}}
@@ -35,6 +40,7 @@ def main(input_file_path: Path, judge_models: list):
     try:
         rubric_path = Path(__file__).parent / "rubrics" / rubric_filename
         rubric_template = rubric_path.read_text(encoding='utf-8')
+        rubric_template = rubric_template.strip()
         print(f"'{model_name}' 모델을 위한 '{rubric_filename}' 기준표를 불러왔습니다.")
     except FileNotFoundError:
         print(f"오류: '{rubric_path}'에서 평가 기준표 파일을 찾을 수 없습니다.")
@@ -55,6 +61,12 @@ def main(input_file_path: Path, judge_models: list):
     
     # 3. 각 결과에 대해 평가 수행
     print(f"{len(rows)}개의 결과를 {len(llm_judges)}명의 심판으로 평가합니다...")
+    # ===================== [디버깅 코드 추가] =====================
+    print("--------------------------------------------------")
+    print("DEBUG: 현재 스크립트가 읽고 있는 rubric.md 파일 내용")
+    print(rubric_template)
+    print("--------------------------------------------------")
+    # ==========================================================
     for row in tqdm(rows):
         # 평가에 필요한 공통 프롬프트 부분 생성
         if is_map_model:
@@ -81,8 +93,8 @@ def main(input_file_path: Path, judge_models: list):
         evaluated_results.append(row)
 
     # 4. 채점 결과가 추가된 새 파일 저장
-    output_dir = input_file_path.parent
-    output_file = output_dir / f"evaluated_{input_file_path.name}"
+    output_dir = input_file_path.parent.parent.parent
+    output_file = output_dir /'scores'/ f"evaluated_{input_file_path.name}"
     print(f"\n상세 평가 결과를 '{output_file.name}' 파일에 저장했습니다.")
     
     fieldnames = list(evaluated_results[0].keys()) if evaluated_results else []

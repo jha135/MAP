@@ -13,29 +13,29 @@ is_catastrophic_failure: (boolean) Did the agent produce a completely irrelevant
 reasoning: (string) A brief justification for your success/failure assessment.
 
 INPUTS:
-Question: {{question}}
+Question: {question}
 
-Correct Answer: {{correct_answer}}
+Correct Answer: {correct_answer}
 
-Generated Answer: {{generated_answer}}
+Generated Answer: {generated_answer}
 
 OUTPUT FORMAT:
 Your entire output MUST be a single, raw JSON object. For baseline models, the strategy_quality and decision_rationality fields are not applicable and should be filled with null values as shown below.
 
-{
-  "task_success": {
+[
+  "task_success": [
     "is_correct": <true_or_false>,
     "is_catastrophic_failure": <true_or_false>,
     "reasoning": "<...>"
-  },
-  "strategy_quality": {
+  ],
+  "strategy_quality": [
     "logic_score": null,
     "efficiency_score": null,
     "creativity_score": null,
     "reasoning": "Not applicable for baseline models."
-  },
-  "decision_rationality": {
+  ],
+  "decision_rationality": [
     "is_rational": null,
     "reasoning": "Not applicable for baseline models."
-  }
-}
+  ]
+]

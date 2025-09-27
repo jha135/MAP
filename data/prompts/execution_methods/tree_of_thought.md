@@ -23,4 +23,4 @@ You are now solving the problem using the Tree-of-Thought (ToT) strategy. This m
  Selected Branch: Branch 2  
  Reason: It’s the most feasible and well-supported path.
  Reasoning: Follow the logic of Branch 2 to solve the problem.
- Final Answer: [Write your answer here]
+>> FINAL ANSWER: [Write your answer here]

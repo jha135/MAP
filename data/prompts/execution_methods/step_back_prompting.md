@@ -18,5 +18,4 @@ Application: Second, use the abstract principles and the solution outline you ju
 USER PROBLEM:
 {{user_query}}
 
-FINAL OUTPUT INSTRUCTION:
-Provide only the final, concrete answer to the user's problem. Do not include your abstract restatement, general principles, solution outline, or any other intermediate reasoning steps in your output.
+>> FINAL ANSWER: [Write your answer here]
