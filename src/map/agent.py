@@ -59,13 +59,13 @@ class MapAgent:
         scores = stage1_data.get("strategy_scores", {})
         score_values = sorted([float(v) for v in scores.values() if str(v).replace('.','',1).isdigit()], reverse=True)
         max_score = score_values[0] if score_values else 0
-        score_gap = (max_score - score_values[1]) if len(score_values) > 1 else 0
+        confidence_score = float(stage1_data.get("confidence_score", 0.0))
 
         path = ''
         # 데이터 기반으로 확정된 최종 규칙을 여기에 적용해야 합니다.
-        if (max_score >= 8 and score_gap >= 3): # confidence_score 조건은 예시로 남겨두되, 주 규칙은 점수 기반으로
+        if (max_score >= 7 and confidence_score <= 0.9): # confidence_score 조건은 예시로 남겨두되, 주 규칙은 점수 기반으로
             path = 'A'
-        elif max_score <= 4 or stage1_data.get("status") == "REQUEST_SYNTHESIS":
+        elif max_score <= 4 or confidence_score <= 0.77 or stage1_data.get("status") == "REQUEST_SYNTHESIS":
             path = 'C'
         else:
             path = 'B'

@@ -119,12 +119,6 @@ def load_hotpotqa(split: str = "validation") -> List[Dict[str, Any]]:
         random.shuffle(problems)
         
         # 처리된 데이터 확인
-        for p in problems:
-            print("\\n--- Loaded Problem ---")
-            print("Question:", p['question'])
-            print("Answer:", p['answer'])
-            print("Processed Context:", p['context'])
-
         return problems
     except Exception as e:
         print(f"An error occurred while loading or processing the JSONL file: {e}")

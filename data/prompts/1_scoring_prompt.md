@@ -17,11 +17,11 @@ Your output MUST be a single JSON object containing only the "strategy_scores" k
 ```json
 {
   "strategy_scores": {
-    "Chain_of_Thought": "<Integer score between 1-10>",
-    "Tree_of_Thought": "<Integer score between 1-10>",
-    "Plan_and_Solve": "<Integer score between 1-10>",
-    "Self_Refine": "<Integer score between 1-10>",
-    "Step_Back_prompting": "<Integer score between 1-10>"
+    "Chain_of_Thought": "<Integer score between 1.0-10.0>",
+    "Tree_of_Thought": "<Integer score between 1.0-10.0>",
+    "Plan_and_Solve": "<Integer score between 1.0-10.0>",
+    "Self_Refine": "<Integer score between 1.0-10.0>",
+    "Step_Back_prompting": "<Integer score between 1.0-10.0>"
   }
 }
 PROBLEM TO ANALYZE

@@ -15,6 +15,6 @@ Based on the input scores above, your output MUST be a single JSON object with t
   "selected_strategy": "<The name of the single strategy with the highest score>",
   "reasoning": "<The core reason for selecting this strategy based on the scores>",
   "confidence_score": "<Your confidence in this final selection, as a float between 0.0 and 1.0>",
-  "mitigation_plan": "<If confidence_score is less than 0.8, describe a backup plan. If 0.8 or higher, this should be null.>",
+  "mitigation_plan": "<If confidence_score is less than 0.9, describe a backup plan. If 0.9 or higher, this should be null.>",
   "status": "<If all scores are 4 or less, return 'REQUEST_SYNTHESIS'. Otherwise, this should be null.>"
 }
