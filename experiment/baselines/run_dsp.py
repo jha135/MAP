@@ -96,7 +96,7 @@ class MapAgentDsp:
             unified_prompt = self.synthesis_unified_prompt_template.replace("{{user_query}}", input_query)
             final_answer, path_tokens = self.llm_handler.invoke(unified_prompt)
             total_tokens.update(path_tokens)
-            execution_log['path_C_log'] = {"method": "Unified Synthesis"}
+            execution_log['path_    log'] = {"method": "Unified Synthesis"}
 
         else: # Path B
             print("Path B: Guarded Execution with Self-Correction")

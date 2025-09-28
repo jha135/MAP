@@ -23,8 +23,7 @@ def main(benchmark_name: str, limit: int):
     llm_handler = LLMHandler()
     try:
         prompt_dir = Path(__file__).resolve().parent.parent.parent / "data" / "prompts"
-        # MRP 전용 프롬프트 파일을 불러옵니다.
-        meta_prompt_template = (prompt_dir / "mrp_evaluation.md").read_text(encoding='utf-8')
+        meta_prompt_template = (prompt_dir / "mrp.md").read_text(encoding='utf-8')
         print("MRP-specific prompt template loaded successfully.")
     except FileNotFoundError as e:
         print(f"Error: Could not find the MRP prompt file. {e}")
@@ -32,17 +31,22 @@ def main(benchmark_name: str, limit: int):
 
     # 2. Load Benchmark Data
     benchmark_name_lower = benchmark_name.lower()
+    
+    # [FIXED] Removed lambda and split arguments to match the correct loading method.
     loader_map = {
-        'gsm8k': lambda: load_gsm8k(split="test"),
-        'drop': lambda: load_drop(split="validation"),
-        'hotpotqa': lambda: load_hotpotqa(split="validation"),
-        'game_of_24': lambda: load_game_of_24(split="test"),
-        'humaneval': lambda: load_humaneval(split="test"),
-        'trivia_cw': lambda: load_trivia_cw(split="test")
+        'gsm8k': load_gsm8k,
+        'drop': load_drop,
+        'hotpotqa': load_hotpotqa,
+        'game_of_24': load_game_of_24,
+        'humaneval': load_humaneval,
+        'trivia_cw': load_trivia_cw
     }
+    
     loader = loader_map.get(benchmark_name_lower)
     if not loader:
         raise ValueError(f"Unknown or unsupported benchmark: {benchmark_name}")
+    
+    # Load problems by calling the loader function without arguments.
     problems = loader()
 
     if not problems:
@@ -70,11 +74,9 @@ def main(benchmark_name: str, limit: int):
             selection_output_str, selection_tokens = llm_handler.invoke(meta_prompt)
             total_tokens.update(selection_tokens)
 
-            # 단순 텍스트 파싱 로직
-            selected_strategy = "cot" # 파싱 실패 시 기본값
+            selected_strategy = "cot" 
             mrp_log = {"raw_output": selection_output_str}
             try:
-                # ">> FINAL CHOICE:" 라인에서 전략 이름을 추출
                 match = re.search(r'>> FINAL CHOICE:\s*([a-zA-Z_ -]+)', selection_output_str)
                 if match:
                     selected_strategy = match.group(1).strip()
@@ -106,8 +108,9 @@ def main(benchmark_name: str, limit: int):
 
     # 4. Save Results
     print("\nSaving results...")
-    timestamp = datetime.now().strftime("%Y%m%d_%HM%S")
-    results_dir = Path(__file__).resolve().parent.parent.parent / "results" / "scores"
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    # [MODIFIED] Standardized the save path to match other scripts.
+    results_dir = Path(__file__).resolve().parent.parent.parent / "results" / "outputs" / "baseline" / "mrp"
     results_dir.mkdir(parents=True, exist_ok=True)
     
     file_name = f"results_MRP_{benchmark_name}_{timestamp}.csv"
