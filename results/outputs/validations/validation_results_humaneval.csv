@@ -1,0 +1,299 @@
+question,max_score,score_gap,confidence_score,selected_strategy,final_outcome,total_tokens
+"
+
+
+def sum_squares(lst):
+    """"""""
+    This function will take a list of integers. For all entries in the list, the function shall square the integer entry if its index is a 
+    multiple of 3 and will cube the integer entry if its index is a multiple of 4 and not a multiple of 3. The function will not 
+    change the entries in the list whose indexes are not a multiple of 3 or 4. The function shall then return the sum of all entries. 
+    
+    Examples:
+    For lst = [1,2,3] the output should be 6
+    For lst = []  the output should be 0
+    For lst = [-1,-5,2,-1,-5]  the output should be -126
+    """"""
+",8.0,2.0,0.92,Plan_and_Solve,success,"{""completion_tokens"": 650, ""prompt_tokens"": 1074, ""total_tokens"": 1724, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 640, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"from typing import List
+
+
+def has_close_elements(numbers: List[float], threshold: float) -> bool:
+    """""" Check if in given list of numbers, are any two numbers closer to each other than
+    given threshold.
+    >>> has_close_elements([1.0, 2.0, 3.0], 0.5)
+    False
+    >>> has_close_elements([1.0, 2.8, 3.0, 4.0, 5.0, 2.0], 0.3)
+    True
+    """"""
+",9.0,2.0,0.92,Plan_and_Solve,success,"{""completion_tokens"": 714, ""prompt_tokens"": 715, ""total_tokens"": 1429, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 704, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def digitSum(s):
+    """"""Task
+    Write a function that takes a string as input and returns the sum of the upper characters only'
+    ASCII codes.
+
+    Examples:
+        digitSum("""") => 0
+        digitSum(""abAB"") => 131
+        digitSum(""abcCd"") => 67
+        digitSum(""helloE"") => 69
+        digitSum(""woArBld"") => 131
+        digitSum(""aAaaaXa"") => 153
+    """"""
+",8.0,2.0,0.92,Plan_and_Solve,success,"{""completion_tokens"": 394, ""prompt_tokens"": 579, ""total_tokens"": 973, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 384, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+
+def add(x: int, y: int):
+    """"""Add two numbers x and y
+    >>> add(2, 3)
+    5
+    >>> add(5, 7)
+    12
+    """"""
+",3.0,0.0,0.75,Chain_of_Thought,failure,"{""completion_tokens"": 912, ""prompt_tokens"": 283, ""total_tokens"": 1195, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 768, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def special_factorial(n):
+    """"""The Brazilian factorial is defined as:
+    brazilian_factorial(n) = n! * (n-1)! * (n-2)! * ... * 1!
+    where n > 0
+
+    For example:
+    >>> special_factorial(4)
+    288
+
+    The function will receive an integer as input and should return the special
+    factorial of this integer.
+    """"""
+",9.0,3.0,0.92,Plan_and_Solve,success,"{""completion_tokens"": 266, ""prompt_tokens"": 684, ""total_tokens"": 950, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 256, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+
+def modp(n: int, p: int):
+    """"""Return 2^n modulo p (be aware of numerics).
+    >>> modp(3, 5)
+    3
+    >>> modp(1101, 101)
+    2
+    >>> modp(0, 101)
+    1
+    >>> modp(3, 11)
+    8
+    >>> modp(100, 101)
+    1
+    """"""
+",9.0,2.0,0.9,Plan_and_Solve,success,"{""completion_tokens"": 714, ""prompt_tokens"": 628, ""total_tokens"": 1342, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 704, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def make_a_pile(n):
+    """"""
+    Given a positive integer n, you have to make a pile of n levels of stones.
+    The first level has n stones.
+    The number of stones in the next level is:
+        - the next odd number if n is odd.
+        - the next even number if n is even.
+    Return the number of stones in each level in a list, where element at index
+    i represents the number of stones in the level (i+1).
+
+    Examples:
+    >>> make_a_pile(3)
+    [3, 5, 7]
+    """"""
+",7.0,1.0,0.85,Plan_and_Solve,success,"{""completion_tokens"": 74, ""prompt_tokens"": 548, ""total_tokens"": 622, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 64, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+
+def strlen(string: str) -> int:
+    """""" Return length of given string
+    >>> strlen('')
+    0
+    >>> strlen('abc')
+    3
+    """"""
+",3.0,0.0,0.76,Plan_and_Solve,failure,"{""completion_tokens"": 1051, ""prompt_tokens"": 283, ""total_tokens"": 1334, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 896, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def intersection(interval1, interval2):
+    """"""You are given two intervals,
+    where each interval is a pair of integers. For example, interval = (start, end) = (1, 2).
+    The given intervals are closed which means that the interval (start, end)
+    includes both start and end.
+    For each given interval, it is assumed that its start is less or equal its end.
+    Your task is to determine whether the length of intersection of these two 
+    intervals is a prime number.
+    Example, the intersection of the intervals (1, 3), (2, 4) is (2, 3)
+    which its length is 1, which not a prime number.
+    If the length of the intersection is a prime number, return ""YES"",
+    otherwise, return ""NO"".
+    If the two intervals don't intersect, return ""NO"".
+
+
+    [input/output] samples:
+    intersection((1, 2), (2, 3)) ==> ""NO""
+    intersection((-1, 1), (0, 4)) ==> ""NO""
+    intersection((-3, -1), (-5, 5)) ==> ""YES""
+    """"""
+",9.0,1.0,0.87,Chain_of_Thought,success,"{""completion_tokens"": 714, ""prompt_tokens"": 809, ""total_tokens"": 1523, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 704, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def get_odd_collatz(n):
+    """"""
+    Given a positive integer n, return a sorted list that has the odd numbers in collatz sequence.
+
+    The Collatz conjecture is a conjecture in mathematics that concerns a sequence defined
+    as follows: start with any positive integer n. Then each term is obtained from the 
+    previous term as follows: if the previous term is even, the next term is one half of 
+    the previous term. If the previous term is odd, the next term is 3 times the previous
+    term plus 1. The conjecture is that no matter what value of n, the sequence will always reach 1.
+
+    Note: 
+        1. Collatz(1) is [1].
+        2. returned list sorted in increasing order.
+
+    For example:
+    get_odd_collatz(5) returns [1, 5] # The collatz sequence for 5 is [5, 16, 8, 4, 2, 1], so the odd numbers are only 1, and 5.
+    """"""
+",8.0,2.0,0.90,Plan_and_Solve,success,"{""completion_tokens"": 1674, ""prompt_tokens"": 846, ""total_tokens"": 2520, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 1664, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+
+def max_element(l: list):
+    """"""Return maximum element in the list.
+    >>> max_element([1, 2, 3])
+    3
+    >>> max_element([5, 3, -5, 2, -3, 3, 9, 0, 123, 1, -10])
+    123
+    """"""
+",6.0,1.0,0.9,Plan_and_Solve,success,"{""completion_tokens"": 522, ""prompt_tokens"": 555, ""total_tokens"": 1077, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 512, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"from typing import List
+
+
+def string_xor(a: str, b: str) -> str:
+    """""" Input are two strings a and b consisting only of 1s and 0s.
+    Perform binary XOR on these inputs and return result also as a string.
+    >>> string_xor('010', '110')
+    '100'
+    """"""
+",8.0,2.0,0.92,Step_Back_prompting,success,"{""completion_tokens"": 138, ""prompt_tokens"": 257, ""total_tokens"": 395, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 128, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def closest_integer(value):
+    '''
+    Create a function that takes a value (string) representing a number
+    and returns the closest integer to it. If the number is equidistant
+    from two integers, round it away from zero.
+
+    Examples
+    >>> closest_integer(""10"")
+    10
+    >>> closest_integer(""15.3"")
+    15
+
+    Note:
+    Rounding away from zero means that if the given number is equidistant
+    from two integers, the one you should return is the one that is the
+    farthest from zero. For example closest_integer(""14.5"") should
+    return 15 and closest_integer(""-14.5"") should return -15.
+    '''
+",9.0,2.0,0.93,Plan_and_Solve,success,"{""completion_tokens"": 778, ""prompt_tokens"": 735, ""total_tokens"": 1513, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 768, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def is_happy(s):
+    """"""You are given a string s.
+    Your task is to check if the string is happy or not.
+    A string is happy if its length is at least 3 and every 3 consecutive letters are distinct
+    For example:
+    is_happy(a) => False
+    is_happy(aa) => False
+    is_happy(abcd) => True
+    is_happy(aabb) => False
+    is_happy(adb) => True
+    is_happy(xyy) => False
+    """"""
+",6.0,1.0,0.88,Chain_of_Thought,success,"{""completion_tokens"": 266, ""prompt_tokens"": 514, ""total_tokens"": 780, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 256, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def histogram(test):
+    """"""Given a string representing a space separated lowercase letters, return a dictionary
+    of the letter with the most repetition and containing the corresponding count.
+    If several letters have the same occurrence, return all of them.
+    
+    Example:
+    histogram('a b c') == {'a': 1, 'b': 1, 'c': 1}
+    histogram('a b b a') == {'a': 2, 'b': 2}
+    histogram('a b c a b') == {'a': 2, 'b': 2}
+    histogram('b b b b a') == {'b': 4}
+    histogram('') == {}
+
+    """"""
+",8.0,1.0,0.9,Chain_of_Thought,success,"{""completion_tokens"": 1034, ""prompt_tokens"": 527, ""total_tokens"": 1561, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 1024, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def move_one_ball(arr):
+    """"""We have an array 'arr' of N integers arr[1], arr[2], ..., arr[N].The
+    numbers in the array will be randomly ordered. Your task is to determine if
+    it is possible to get an array sorted in non-decreasing order by performing 
+    the following operation on the given array:
+        You are allowed to perform right shift operation any number of times.
+    
+    One right shift operation means shifting all elements of the array by one
+    position in the right direction. The last element of the array will be moved to
+    the starting position in the array i.e. 0th index. 
+
+    If it is possible to obtain the sorted array by performing the above operation
+    then return True else return False.
+    If the given array is empty then return True.
+
+    Note: The given list is guaranteed to have unique elements.
+
+    For Example:
+    
+    move_one_ball([3, 4, 5, 1, 2])==>True
+    Explanation: By performin 2 right shift operations, non-decreasing order can
+                 be achieved for the given array.
+    move_one_ball([3, 5, 4, 1, 2])==>False
+    Explanation:It is not possible to get non-decreasing order for the given
+                array by performing any number of right shift operations.
+                
+    """"""
+",9.0,1.0,0.93,Step_Back_prompting,success,"{""completion_tokens"": 1546, ""prompt_tokens"": 498, ""total_tokens"": 2044, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 1536, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def sort_array(array):
+    """"""
+    Given an array of non-negative integers, return a copy of the given array after sorting,
+    you will sort the given array in ascending order if the sum( first index value, last index value) is odd,
+    or sort it in descending order if the sum( first index value, last index value) is even.
+
+    Note:
+    * don't change the given array.
+
+    Examples:
+    * sort_array([]) => []
+    * sort_array([5]) => [5]
+    * sort_array([2, 4, 3, 0, 1, 5]) => [0, 1, 2, 3, 4, 5]
+    * sort_array([2, 4, 3, 0, 1, 5, 6]) => [6, 5, 4, 3, 2, 1, 0]
+    """"""
+",6.0,1.0,0.84,Chain_of_Thought,success,"{""completion_tokens"": 330, ""prompt_tokens"": 606, ""total_tokens"": 936, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 320, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+def solution(lst):
+    """"""Given a non-empty list of integers, return the sum of all of the odd elements that are in even positions.
+    
+
+    Examples
+    solution([5, 8, 7, 1]) ==> 12
+    solution([3, 3, 3, 3, 3]) ==> 9
+    solution([30, 13, 24, 321]) ==>0
+    """"""
+",8.0,2.0,0.9,Plan_and_Solve,success,"{""completion_tokens"": 330, ""prompt_tokens"": 621, ""total_tokens"": 951, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 320, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"
+
+def fib(n: int):
+    """"""Return n-th Fibonacci number.
+    >>> fib(10)
+    55
+    >>> fib(1)
+    1
+    >>> fib(8)
+    21
+    """"""
+",7.0,1.0,0.84,Plan_and_Solve,success,"{""completion_tokens"": 778, ""prompt_tokens"": 772, ""total_tokens"": 1550, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 768, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
+"from typing import List
+
+
+def filter_by_prefix(strings: List[str], prefix: str) -> List[str]:
+    """""" Filter an input list of strings only for ones that start with a given prefix.
+    >>> filter_by_prefix([], 'a')
+    []
+    >>> filter_by_prefix(['abc', 'bcd', 'cde', 'array'], 'a')
+    ['abc', 'array']
+    """"""
+",4.0,0.0,0.72,Plan_and_Solve,failure,"{""completion_tokens"": 1042, ""prompt_tokens"": 283, ""total_tokens"": 1325, ""completion_tokens_details"": {""accepted_prediction_tokens"": 0, ""audio_tokens"": 0, ""reasoning_tokens"": 896, ""rejected_prediction_tokens"": 0}, ""prompt_tokens_details"": {""audio_tokens"": 0, ""cached_tokens"": 0}}"
