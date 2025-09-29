@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Dict, Any
 from tqdm import tqdm
 try:
-    sys.path.append(str(Path(__file__).resolve().parent.parent))
+    sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
     from src.map.llm_handler import LLMHandler
     from src.map.strategy_executor import run_strategy
     from src.utils.data_loader import (
@@ -202,7 +202,7 @@ def main(benchmark_name: str, limit: int):
 
     print("\nSaving results...")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    results_dir = Path(__file__).resolve().parent.parent / "results" / "outputs" / "baselines"
+    results_dir = Path(__file__).resolve().parent.parent.parent / "results" / "outputs" / "baselines"
     results_dir.mkdir(parents=True, exist_ok=True)
     
     file_name = f"results_MAP-DSP_{benchmark_name}_{timestamp}.csv"

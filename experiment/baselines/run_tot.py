@@ -5,7 +5,7 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 from tqdm import tqdm
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from src.map.llm_handler import LLMHandler
 from src.map.strategy_executor import run_strategy
 from src.utils.data_loader import (
