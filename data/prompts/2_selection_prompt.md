@@ -7,7 +7,7 @@ You are an AI agent that makes a final decision based on a pre-computed analysis
 {{strategy_scores_json}}
 
 ## OUTPUT INSTRUCTION
-Based on the input scores above, your output MUST be a single JSON object with the following keys. Do not add any other text.
+Based on the input scores above, your output MUST be a single JSON object with the following keys. Do no  t add any other text.
 
 ### JSON OUTPUT FORMAT
 ```json
