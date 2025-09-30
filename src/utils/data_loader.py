@@ -2,7 +2,6 @@ import json
 from pathlib import Path
 from typing import List, Dict, Any
 import pandas as pd
-import random
 import sys
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -24,7 +23,6 @@ def load_gsm8k(split: str = "test") -> List[Dict[str, Any]]:
             problems = [json.loads(line) for line in f]
         
         print(f"Successfully loaded {len(problems)} problems from GSM8K.")
-        random.shuffle(problems)
         return problems
     except Exception as e:
         print(f"An error occurred while loading the JSONL file: {e}")
@@ -58,7 +56,6 @@ def load_game_of_24(split: str = "test") -> List[Dict[str, Any]]:
                 else:
                      print(f"Warning: Skipping invalid line (missing key): {line.strip()}", file=sys.stderr)
         print(f"Successfully loaded {len(problems)} problems from Game of 24.")
-        random.shuffle(problems)
         return problems
     except json.JSONDecodeError as e:
         print(f"An error occurred while parsing the JSONL file: {e}", file=sys.stderr)
@@ -87,7 +84,6 @@ def load_drop(split: str = "validation") -> List[Dict[str, Any]]:
                 p['context'] = p['passage']
         
         print(f"Successfully loaded {len(problems)} problems from DROP.")
-        random.shuffle(problems)
         return problems
     except Exception as e:
         print(f"An error occurred while loading the JSONL file: {e}")
@@ -116,7 +112,6 @@ def load_hotpotqa(split: str = "validation") -> List[Dict[str, Any]]:
                 p['context'] = " ".join(all_sentences)
         
         print(f"Successfully loaded {len(problems)} problems from HotpotQA.")
-        random.shuffle(problems)
         
         # 처리된 데이터 확인
         return problems
@@ -147,7 +142,6 @@ def load_humaneval(split: str = "test") -> List[Dict[str, Any]]:
             })
 
         print(f"Successfully loaded {len(formatted_problems)} problems from HumanEval.")
-        random.shuffle(formatted_problems)
         return formatted_problems
     except Exception as e:
         print(f"An error occurred while loading the JSONL file: {e}")
@@ -169,7 +163,6 @@ def load_trivia_cw(split: str = "test") -> List[Dict[str, Any]]:
             problems = [json.loads(line) for line in f]
         
         print(f"Successfully loaded {len(problems)} problems from TriviaQA.")
-        random.shuffle(problems)
         return problems
     except Exception as e:
         print(f"An error occurred while loading the JSONL file: {e}")
