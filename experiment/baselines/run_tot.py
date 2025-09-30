@@ -6,12 +6,16 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 from tqdm import tqdm
+<<<<<<< HEAD
 
 # 🔧 프로젝트 루트 경로를 sys.path 맨 앞에 추가 (baselines -> experiment -> 루트)
 ROOT = Path(__file__).resolve().parents[2]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+=======
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
+>>>>>>> 45bace41f180495f501c3308849fe34c02ccc7e7
 from src.map.llm_handler import LLMHandler
 from src.map.strategy_executor import run_strategy
 from src.utils.data_loader import (

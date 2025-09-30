@@ -5,7 +5,7 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 from tqdm import tqdm
-sys.path.append(str(Path(__file__).resolve().parent.parent))
+sys.path.append(str(Path(__file__).resolve().parent.parent.parent))
 from src.map.llm_handler import LLMHandler
 from src.map.strategy_executor import run_strategy
 from src.utils.data_loader import (
@@ -75,7 +75,7 @@ def main(benchmark_name: str, limit: int):
     print("\nSaving results...")
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     # [경로 수정] MAP 에이전트와 동일하게 results/outputs/main 디렉토리에 저장하도록 변경
-    results_dir = Path(__file__).resolve().parent.parent / "results" / "outputs" / "baseline" / "step_back"
+    results_dir = Path(__file__).resolve().parent.parent.parent / "results" / "outputs" / "baseline" / "step_back"
     results_dir.mkdir(parents=True, exist_ok=True)
     
     # [파일명 수정] Baseline 이라는 것을 명확히 표시
