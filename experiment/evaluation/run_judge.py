@@ -93,7 +93,7 @@ def main(input_file_path: Path, judge_models: list):
         evaluated_results.append(row)
 
     # 4. 채점 결과가 추가된 새 파일 저장
-    output_dir = input_file_path.parent.parent.parent
+    output_dir = input_file_path.parent.parent.parent.parent
     output_file = output_dir /'scores'/ f"evaluated_{input_file_path.name}"
     print(f"\n상세 평가 결과를 '{output_file.name}' 파일에 저장했습니다.")
     
