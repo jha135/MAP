@@ -22,7 +22,7 @@ def main(benchmark_name: str, limit: int):
     # 1. Initialize Handlers and Load MRP-specific Prompt
     llm_handler = LLMHandler()
     try:
-        prompt_dir = Path(__file__).resolve().parent.parent.parent / "data" / "prompts"
+        prompt_dir = Path(__file__).resolve().parent.parent.parent / "data" / "prompts" / "execution_methods"
         meta_prompt_template = (prompt_dir / "mrp.md").read_text(encoding='utf-8')
         print("MRP-specific prompt template loaded successfully.")
     except FileNotFoundError as e:
@@ -74,18 +74,33 @@ def main(benchmark_name: str, limit: int):
             selection_output_str, selection_tokens = llm_handler.invoke(meta_prompt)
             total_tokens.update(selection_tokens)
 
-            selected_strategy = "cot" 
+            selected_strategy = "chain_of_thought" 
             mrp_log = {"raw_output": selection_output_str}
+            mrp_log = {"raw_output": selection_output_str}
+            selected_strategy = "chain_of_thought"  # 기본 전략으로 우선 설정
+
             try:
-                match = re.search(r'>> FINAL CHOICE:\s*([a-zA-Z_ -]+)', selection_output_str)
-                if match:
-                    selected_strategy = match.group(1).strip()
-                mrp_log["selected_strategy"] = selected_strategy
-            except Exception as e:
-                mrp_log["error"] = f"Failed to parse FINAL CHOICE: {e}"
+                # LLM의 응답 문자열에서 JSON 부분만 찾기 (가장 큰 JSON 블록을 찾음)
+                json_match = re.search(r'\{.*\}', selection_output_str, re.DOTALL)
+                if not json_match:
+                    raise json.JSONDecodeError("No JSON object found in the output.", selection_output_str, 0)
+                
+                # 찾은 JSON 문자열을 파이썬 딕셔너리로 변환
+                parsed_json = json.loads(json_match.group(0))
+                
+                # 'selected_strategy' 키를 이용해 값 추출
+                selected_strategy = parsed_json['selected_strategy']
+                
+                # 로그에는 파싱된 전체 JSON 데이터를 저장하여 더 풍부한 정보 기록
+                mrp_log['parsed_data'] = parsed_json
+                mrp_log['selected_strategy'] = selected_strategy # 명시적으로도 저장
+
+            except (json.JSONDecodeError, KeyError) as e:
+                # JSON 파싱에 실패하거나, 필요한 키가 없는 경우
+                mrp_log["error"] = f"Failed to parse JSON or find key: {e}"
 
             # === MRP Phase 2: Execution ===
-            generated_answer, execution_tokens = run_strategy(llm_handler, selected_strategy, question, context)
+            generated_answer, execution_tokens, *_ = run_strategy(llm_handler, selected_strategy, question, context)
             total_tokens.update(execution_tokens)
             
             results.append({
